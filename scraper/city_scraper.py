@@ -1,4 +1,5 @@
 import os
+import json
 from cityair_api import CityAirRequest, Period
 
 
@@ -16,15 +17,21 @@ class DataScraper:
         if not os.path.exists(output_path):
             os.mkdir(output_path)
 
-    def scrap_all_cities(self, cities: list):
-        for city in cities:
-            self.scrap_city(city)
+    def scrap_all_cities(self):
+        for location in self.city_air_api.get_locations():
+            self.scrap_city(location)
 
-    def scrap_city(self, city: City):
-        city_output_path = os.path.join(self.output_path, city.login)
-        r = CityAirRequest(city.login, city.password)
-        stations = r.get_stations()
-        for station_id in stations:
-            output_file = city_output_path + '_station_' + str(station_id) + '.csv'
-            df = r.get_station_data(station_id=station_id, period=Period.HOUR)
+    def scrap_city(self, city):
+        city_output_path = os.path.join(self.output_path, city['name'])
+        if 'stations' not in city or city['stations'] is None:
+            print("Empty city: " + json.dumps(city, indent=4))
+            return
+        with open(city_output_path + '.json', 'w') as cf:
+            cf.write(json.dumps(city, indent=4))
+        for station in city['stations']:
+            output_file = city_output_path + '_station_' + str(station['id']) + '.csv'
+            output_json_file = city_output_path + '_station_' + str(station['id']) + '.json'
+            with open(output_json_file, 'w') as f:
+                f.write(json.dumps(station, indent=4))
+            df = self.city_air_api.get_station_data(station_id=station['id'], period=Period.HOUR)
             df.to_csv(output_file, sep='\t', encoding='utf-8')
