@@ -2,15 +2,17 @@ import os
 from cityair_api import CityAirRequest, Period
 
 
-class City:
+class User:
     def __init__(self, login, password):
         self.login = login
         self.password = password
 
 
 class DataScraper:
-    def __init__(self, output_path: str):
+    def __init__(self, user: User, output_path: str):
         self.output_path = output_path
+        self.user: User = user
+        self.city_air_api = CityAirRequest(self.user.login, self.user.password)
         if not os.path.exists(output_path):
             os.mkdir(output_path)
 
