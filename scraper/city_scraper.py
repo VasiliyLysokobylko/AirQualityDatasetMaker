@@ -9,7 +9,7 @@ class User:
         self.password = password
 
 
-class DataScraper:
+class CityAirScraper:
     def __init__(self, user: User, output_path: str):
         self.output_path = output_path
         self.user: User = user
