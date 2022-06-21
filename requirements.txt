@@ -3,7 +3,7 @@ certifi==2019.11.28
 chardet==3.0.4
 cityair-api==0.2.42
 idna==2.8
-numpy==1.17.4
+numpy==1.22.0
 pandas==0.25.3
 progressbar2==3.47.0
 python-dateutil==2.8.1
