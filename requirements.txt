@@ -1,5 +1,5 @@
 cached-property==1.5.1
-certifi==2019.11.28
+certifi==2022.12.7
 chardet==3.0.4
 cityair-api==0.2.42
 idna==2.8
